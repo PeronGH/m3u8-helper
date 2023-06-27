@@ -2,7 +2,7 @@ import { M3U8, parseM3U8, Segment } from "./parser.ts";
 import { dirname } from "std/path/mod.ts";
 
 export interface SegmentWithData extends Segment {
-  data: Blob;
+  data: ReadableStream<Uint8Array>;
 }
 
 export interface M3U8WithData extends M3U8 {
@@ -18,14 +18,16 @@ export async function downloadSegments(
   baseURI: string,
   requestInit?: RequestInit,
 ): Promise<SegmentWithData[]> {
-  const blobs = await Promise.all(
+  const streams = await Promise.all(
     getURIList(segments, baseURI).map((uri) =>
-      fetch(uri, requestInit).then((response) => response.blob())
+      fetch(uri, requestInit).then((response) =>
+        response.body ?? new ReadableStream()
+      )
     ),
   );
-  return blobs.map((blob, index) => ({
+  return streams.map((stream, index) => ({
     ...segments[index],
-    data: blob,
+    data: stream,
   }));
 }
 
