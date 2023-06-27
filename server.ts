@@ -4,7 +4,7 @@ import { concatSegments, downloadM3U8 } from "./mod.ts";
 const handler: Handler = async (req) => {
   try {
     const m3u8URL = req.url.slice(new URL(req.url).origin.length + 1);
-    const m3u8 = await downloadM3U8(m3u8URL);
+    const m3u8 = await downloadM3U8(m3u8URL, req);
     const coactedBlob = concatSegments(m3u8.segments);
     return new Response(coactedBlob);
   } catch (error) {
