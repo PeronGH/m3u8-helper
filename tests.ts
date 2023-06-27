@@ -1,5 +1,4 @@
-import { concatSegments } from "./src/codec.ts";
-import { downloadM3U8 } from "./src/downloader.ts";
+import { concatSegments, downloadM3U8 } from "./mod.ts";
 
 const url = prompt("URL:")!;
 
