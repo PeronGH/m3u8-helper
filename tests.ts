@@ -6,6 +6,8 @@ const m3u8 = await downloadM3U8(url);
 
 console.log(m3u8);
 
-const finalStream = concatSegments(m3u8.segments);
+const finalFile = concatSegments(m3u8.segments);
 
-Deno.writeFile("final.ts", finalStream);
+console.log(finalFile);
+
+Deno.writeFile("final.ts", finalFile.stream());
